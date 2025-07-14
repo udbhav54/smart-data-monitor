@@ -1,6 +1,13 @@
 # 🌐 Smart Data Monitor
 
-A comprehensive real-time network monitoring application demonstrating 5 modern Web APIs
+A comprehensive real-t## 🌍 Live Demo
+
+🚀 **[View Live Application](https://smart-data-monitor.vercel.app/)**  
+_Experience the Smart Data Monitor in action_
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/udbhav54/smart-data-monitor)
+
+---k monitoring application demonstrating 5 modern Web APIs
 
 ---
 
@@ -47,7 +54,18 @@ _Real-time status monitoring of all 5 Web APIs_
 
 ---
 
-## 🎯 Why I Chose This Project
+## � Live Demo
+
+🚀 **[View Live Application](https://smart-data-monitor.vercel.app/)**  
+_Experience the Smart Data Monitor in action_
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/udbhav54/smart-data-monitor)
+
+> **Note**: Replace `your-app-name.vercel.app` with your actual Vercel deployment URL
+
+---
+
+## �🎯 Why I Chose This Project
 
 ### Real-World Problem Solving
 
@@ -155,7 +173,7 @@ src/
 
 ```bash
 # Clone and install
-git clone <repository-url>
+git clone https://github.com/udbhav54/smart-data-monitor.git
 
 # Navigate into the project directory
 cd smart-data-monitor
