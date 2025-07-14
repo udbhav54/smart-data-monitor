@@ -52,8 +52,6 @@ _Real-time status monitoring of all 5 Web APIs_
 🚀 **[View Live Application](https://smart-data-monitor.vercel.app/)**  
 _Experience the Smart Data Monitor in action_
 
-> **Note**: Replace `your-app-name.vercel.app` with your actual Vercel deployment URL
-
 ---
 
 ## �🎯 Why I Chose This Project
