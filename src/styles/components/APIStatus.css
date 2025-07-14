@@ -1,0 +1,47 @@
+/* APIStatus Component Styles */
+/* API Status sections inherit base styles from .section-wrapper in common.css */
+
+.api-status-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.api-status-item {
+  text-align: center;
+  padding: 12px;
+}
+
+.api-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin: 0 auto 8px;
+  background-color: #10b981;
+  animation: pulse 2s infinite;
+}
+
+.api-status-name {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #374151;
+}
+
+.api-status-text {
+  font-size: 10px;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .api-status-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

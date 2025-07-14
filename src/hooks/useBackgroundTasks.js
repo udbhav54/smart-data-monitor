@@ -5,196 +5,96 @@ import {
   logAPIUsage,
 } from "../utils/errorHandler";
 
+/**
+ * Custom hook for managing Background Tasks API
+ * Performs background processing using requestIdleCallback for optimal performance
+ * @returns {Object} Hook state and data including isActive, taskCount, error, isSupported, performanceData
+ */
 export const useBackgroundTasks = () => {
+  // State for tracking background task status
   const [isActive, setIsActive] = useState(false);
   const [taskCount, setTaskCount] = useState(0);
   const [error, setError] = useState(null);
   const [isSupported, setIsSupported] = useState(false);
   const [performanceData, setPerformanceData] = useState({});
+
+  // Ref to store the current task ID for cleanup
   const taskIdRef = useRef(null);
-  const intervalRef = useRef(null);
 
   useEffect(() => {
-    // Check if Background Tasks API is supported
+    // Check if Background Tasks API is supported in current browser
     const supported = isAPISupported("BackgroundTasks");
     setIsSupported(supported);
 
     if (supported && "requestIdleCallback" in window) {
       try {
+        // Mark background tasks as active
         setIsActive(true);
-        startBackgroundTasks();
-        logAPIUsage("BackgroundTasks", "Background tasks started");
+
+        /**
+         * Performs background data processing when browser is idle
+         * Uses requestIdleCallback to avoid blocking main thread
+         */
+        const performBackgroundTask = () => {
+          taskIdRef.current = window.requestIdleCallback(() => {
+            // Collect performance and system data
+            const data = {
+              timestamp: Date.now(),
+              // Memory usage in MB (if available)
+              memoryUsage: performance.memory
+                ? Math.round(performance.memory.usedJSHeapSize / 1048576)
+                : 0,
+              taskCount: taskCount + 1,
+            };
+
+            // Update task counter and performance data
+            setTaskCount((prev) => prev + 1);
+            setPerformanceData(data);
+
+            // Attempt to store data in localStorage for persistence
+            try {
+              localStorage.setItem("backgroundData", JSON.stringify(data));
+            } catch {
+              // Handle localStorage errors silently (quota exceeded, private mode, etc.)
+              console.warn("LocalStorage not available - data not persisted");
+            }
+
+            // Log API usage for debugging
+            logAPIUsage("BackgroundTasks", data);
+
+            // Schedule next background task in 5 seconds
+            setTimeout(performBackgroundTask, 5000);
+          });
+        };
+
+        // Start the background task loop
+        performBackgroundTask();
       } catch (err) {
-        const errorInfo = handleAPIError("BackgroundTasks", err);
-        setError(errorInfo);
+        // Handle any errors during background task setup
+        setError(handleAPIError("BackgroundTasks", err));
       }
     } else {
-      // Fallback: use setTimeout for browsers without requestIdleCallback
-      setIsActive(true);
-      startFallbackTasks();
-      logAPIUsage("BackgroundTasks", "Using fallback background tasks");
-    }
-
-    return () => {
-      stopBackgroundTasks();
-    };
-  }, []);
-
-  const startBackgroundTasks = () => {
-    const performBackgroundTask = () => {
-      if ("requestIdleCallback" in window) {
-        taskIdRef.current = window.requestIdleCallback(
-          (deadline) => {
-            try {
-              // Perform background data processing
-              const taskData = processDataInBackground(deadline);
-
-              setTaskCount((prev) => prev + 1);
-              setPerformanceData(taskData);
-
-              logAPIUsage("BackgroundTasks", {
-                taskCount: taskCount + 1,
-                timeRemaining: deadline.timeRemaining(),
-                didTimeout: deadline.didTimeout,
-              });
-
-              // Schedule next task
-              setTimeout(performBackgroundTask, 5000);
-            } catch (err) {
-              const errorInfo = handleAPIError("BackgroundTasks", err);
-              setError(errorInfo);
-            }
-          },
-          { timeout: 2000 }
-        );
-      }
-    };
-
-    performBackgroundTask();
-  };
-
-  const startFallbackTasks = () => {
-    const performFallbackTask = () => {
-      try {
-        // Simulate background processing without requestIdleCallback
-        const taskData = processDataInBackground({ timeRemaining: () => 50 });
-
-        setTaskCount((prev) => prev + 1);
-        setPerformanceData(taskData);
-
-        logAPIUsage("BackgroundTasks (Fallback)", {
-          taskCount: taskCount + 1,
-          fallback: true,
-        });
-      } catch (err) {
-        const errorInfo = handleAPIError("BackgroundTasks", err);
-        setError(errorInfo);
-      }
-    };
-
-    intervalRef.current = setInterval(performFallbackTask, 5000);
-  };
-
-  const processDataInBackground = (deadline) => {
-    const startTime = performance.now();
-
-    // Simulate data processing tasks
-    const data = {
-      timestamp: Date.now(),
-      memoryUsage: performance.memory
-        ? {
-            used: Math.round(performance.memory.usedJSHeapSize / 1048576), // MB
-            total: Math.round(performance.memory.totalJSHeapSize / 1048576), // MB
-            limit: Math.round(performance.memory.jsHeapSizeLimit / 1048576), // MB
-          }
-        : null,
-      performanceEntries: performance.getEntriesByType("navigation").length,
-      connectionInfo: navigator.connection
-        ? {
-            effectiveType: navigator.connection.effectiveType,
-            downlink: navigator.connection.downlink,
-          }
-        : null,
-      processingTime: 0,
-    };
-
-    // Simulate some processing work
-    let iterations = 0;
-    const maxIterations = 10000;
-
-    while (
-      iterations < maxIterations &&
-      (deadline.timeRemaining() > 1 || iterations < 100)
-    ) {
-      // Simulate work
-      Math.random() * Math.random();
-      iterations++;
-    }
-
-    const endTime = performance.now();
-    data.processingTime = endTime - startTime;
-    data.iterations = iterations;
-
-    // Store data in localStorage for persistence
-    try {
-      const existingData = JSON.parse(
-        localStorage.getItem("backgroundTaskData") || "[]"
+      // Handle unsupported browsers
+      setIsActive(false);
+      setError(
+        handleAPIError("BackgroundTasks", new Error("API not supported"))
       );
-      existingData.push(data);
-
-      // Keep only last 50 entries
-      const limitedData = existingData.slice(-50);
-      localStorage.setItem("backgroundTaskData", JSON.stringify(limitedData));
-    } catch (e) {
-      console.warn("Could not save to localStorage:", e);
     }
 
-    return data;
-  };
+    // Cleanup function to cancel any pending background tasks
+    return () => {
+      if (taskIdRef.current) {
+        window.cancelIdleCallback(taskIdRef.current);
+      }
+    };
+  }, [taskCount]); // Re-run effect when taskCount changes
 
-  const stopBackgroundTasks = () => {
-    if (taskIdRef.current) {
-      window.cancelIdleCallback(taskIdRef.current);
-      taskIdRef.current = null;
-    }
-
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-
-    setIsActive(false);
-    logAPIUsage("BackgroundTasks", "Background tasks stopped");
-  };
-
-  const getStoredData = () => {
-    try {
-      return JSON.parse(localStorage.getItem("backgroundTaskData") || "[]");
-    } catch (e) {
-      return [];
-    }
-  };
-
-  const clearStoredData = () => {
-    try {
-      localStorage.removeItem("backgroundTaskData");
-      logAPIUsage("BackgroundTasks", "Stored data cleared");
-    } catch (e) {
-      console.warn("Could not clear localStorage:", e);
-    }
-  };
-
+  // Return hook state and data
   return {
     isActive,
     taskCount,
     error,
     isSupported,
     performanceData,
-    getStoredData,
-    clearStoredData,
-    stopBackgroundTasks,
-    startBackgroundTasks: isSupported
-      ? startBackgroundTasks
-      : startFallbackTasks,
   };
 };

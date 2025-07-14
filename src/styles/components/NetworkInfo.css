@@ -1,0 +1,146 @@
+/* NetworkInfo Component Styles */
+/* Network sections inherit base styles from .section-wrapper in common.css */
+
+.network-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.speed-stat {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.speed-header {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.speed-value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.connection-stat h3 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.connection-stat p {
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Network Analysis */
+.network-analysis {
+  margin-top: 16px;
+}
+
+.analysis-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.analysis-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.test-speed-btn {
+  padding: 6px 12px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.test-speed-btn:enabled {
+  background-color: #3b82f6;
+}
+
+.test-speed-btn:enabled:hover {
+  background-color: #2563eb;
+}
+
+.test-speed-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.analysis-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.network-type-stat {
+  background-color: #f0f9ff;
+  color: #0c4a6e;
+}
+
+.performance-stat {
+  background-color: #f0fdf4;
+  color: #14532d;
+}
+
+/* Connection Details */
+.connection-details {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+
+.details-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  font-size: 12px;
+}
+
+.detail-label {
+  color: #6b7280;
+}
+
+.detail-value {
+  font-weight: 600;
+}
+
+.speed-note {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .network-stats,
+  .analysis-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .analysis-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+}

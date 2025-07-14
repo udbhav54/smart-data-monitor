@@ -1,8 +1,8 @@
 // Error handling utility for Web APIs
 export const handleAPIError = (apiName, error) => {
-  const errorMessage = {
-    NetworkInformation: "Network Information API not supported in this browser",
-    Geolocation: "Location access denied or not available",
+  const errorMessages = {
+    NetworkInformation: "Network Information API not supported",
+    Geolocation: "Location access denied",
     IntersectionObserver: "Intersection Observer not supported",
     BackgroundTasks: "Background Tasks API not supported",
     Canvas: "Canvas API not available",
@@ -12,27 +12,26 @@ export const handleAPIError = (apiName, error) => {
 
   return {
     error: true,
-    message: errorMessage[apiName] || "Unknown API error",
+    message: errorMessages[apiName] || "Unknown API error",
     details: error.message || error,
   };
 };
 
-// Check if Web API is supported
 export const isAPISupported = (apiName) => {
   const checks = {
     NetworkInformation: "connection" in navigator,
     Geolocation: "geolocation" in navigator,
     IntersectionObserver: "IntersectionObserver" in window,
     BackgroundTasks: "requestIdleCallback" in window,
-    Canvas: document.createElement("canvas").getContext("2d") !== null,
+    Canvas: !!document.createElement("canvas").getContext("2d"),
   };
 
   return checks[apiName] || false;
 };
 
-// Log API usage for debugging
+// DISABLED: No logging to keep console clean
+// eslint-disable-next-line no-unused-vars
 export const logAPIUsage = (apiName, data) => {
-  if (process.env.NODE_ENV === "development") {
-    console.log(`${apiName} API Data:`, data);
-  }
+  // Logging disabled to prevent console spam
+  // console.log(`${apiName} API:`, data);
 };

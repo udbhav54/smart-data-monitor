@@ -6,20 +6,26 @@ import {
 } from "../utils/errorHandler";
 import { generateNetworkData } from "../utils/dataGenerator";
 
+// Custom hook to provide network connection info and quality
 export const useNetworkInfo = () => {
+  // Holds current network info (either real or simulated)
   const [networkInfo, setNetworkInfo] = useState({});
+  // Holds error info if using real API fails or is unsupported
   const [error, setError] = useState(null);
+  // Tracks whether the NetworkInformation API is supported
   const [isSupported, setIsSupported] = useState(false);
 
   useEffect(() => {
-    // Check if Network Information API is supported
+    // Check if browser supports the NetworkInformation API
     const supported = isAPISupported("NetworkInformation");
     setIsSupported(supported);
 
     if (supported && "connection" in navigator) {
+      // Try using the real NetworkInformation API
       try {
         const connection = navigator.connection;
 
+        // Function to update state when network properties change
         const updateNetworkInfo = () => {
           const info = {
             effectiveType: connection.effectiveType,
@@ -28,39 +34,34 @@ export const useNetworkInfo = () => {
             saveData: connection.saveData,
             type: connection.type,
           };
-
-          setNetworkInfo(info);
-          logAPIUsage("NetworkInformation", info);
+          setNetworkInfo(info); // save in state
+          logAPIUsage("NetworkInformation", info); // debug log
         };
 
-        // Initial update
-        updateNetworkInfo();
-
-        // Listen for changes
+        updateNetworkInfo(); // initial update
         connection.addEventListener("change", updateNetworkInfo);
-
-        return () => {
+        // cleanup listener on unmount
+        return () =>
           connection.removeEventListener("change", updateNetworkInfo);
-        };
       } catch (err) {
-        const errorInfo = handleAPIError("NetworkInformation", err);
-        setError(errorInfo);
+        // If error occurs, capture it with standardized error handler
+        setError(handleAPIError("NetworkInformation", err));
       }
     } else {
-      // Fallback: simulate network data for demo purposes
-      const simulateNetworkData = () => {
+      // Fallback: simulate network data if API unsupported
+      const simulateNetwork = () => {
         const data = generateNetworkData();
         setNetworkInfo(data);
         logAPIUsage("NetworkInformation (Simulated)", data);
       };
 
-      simulateNetworkData();
-      const interval = setInterval(simulateNetworkData, 10000); // Update every 10 seconds
-
-      return () => clearInterval(interval);
+      simulateNetwork(); // initial simulation
+      const interval = setInterval(simulateNetwork, 10000); // repeat simulation
+      return () => clearInterval(interval); // cleanup simulation
     }
-  }, []);
+  }, []); // run once on mount
 
+  // Helper function to convert effectiveType to human‑friendly quality
   const getConnectionQuality = () => {
     if (!networkInfo.effectiveType) return "unknown";
     const type = networkInfo.effectiveType;
@@ -70,10 +71,6 @@ export const useNetworkInfo = () => {
     return "fair";
   };
 
-  return {
-    networkInfo,
-    error,
-    isSupported,
-    getConnectionQuality,
-  };
+  // Expose stored values and helper function
+  return { networkInfo, error, isSupported, getConnectionQuality };
 };

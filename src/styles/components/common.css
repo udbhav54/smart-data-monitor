@@ -1,0 +1,144 @@
+/* Common Component Styles */
+
+/* Section Wrapper */
+.section-wrapper {
+  opacity: 0.7;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.section-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Section Header */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Status Dots */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-green {
+  background-color: #10b981;
+}
+.status-yellow {
+  background-color: #f59e0b;
+}
+.status-red {
+  background-color: #ef4444;
+}
+
+/* Stat Box */
+.stat-box {
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  width: 20px;
+  height: 20px;
+  margin: 0 auto 8px;
+  display: block;
+}
+
+.stat-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Background Colors */
+.bg-blue {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+.bg-green {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+.bg-yellow {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+.bg-red {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+.bg-purple {
+  background-color: #e9d5ff;
+  color: #6b21a8;
+}
+
+/* Grid System */
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.grid-cols-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4,
+  .grid-cols-5 {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .stat-box {
+    padding: 12px;
+  }
+}

@@ -5,8 +5,7 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
 }
@@ -30,20 +29,13 @@ body {
   gap: 16px;
 }
 
-.grid-cols-2 {
-  grid-template-columns: repeat(2, 1fr);
-}
-.grid-cols-3 {
-  grid-template-columns: repeat(3, 1fr);
-}
-.grid-cols-4 {
-  grid-template-columns: repeat(4, 1fr);
-}
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-cols-5 { grid-template-columns: repeat(5, 1fr); }
 
 @media (max-width: 768px) {
-  .grid-cols-2,
-  .grid-cols-3,
-  .grid-cols-4 {
+  .grid-cols-2, .grid-cols-3, .grid-cols-4, .grid-cols-5 {
     grid-template-columns: 1fr;
   }
 }
@@ -54,26 +46,11 @@ body {
   text-align: center;
 }
 
-.bg-blue {
-  background-color: #dbeafe;
-  color: #1e40af;
-}
-.bg-green {
-  background-color: #d1fae5;
-  color: #065f46;
-}
-.bg-yellow {
-  background-color: #fef3c7;
-  color: #92400e;
-}
-.bg-red {
-  background-color: #fee2e2;
-  color: #991b1b;
-}
-.bg-purple {
-  background-color: #e9d5ff;
-  color: #6b21a8;
-}
+.bg-blue { background-color: #dbeafe; color: #1e40af; }
+.bg-green { background-color: #d1fae5; color: #065f46; }
+.bg-yellow { background-color: #fef3c7; color: #92400e; }
+.bg-red { background-color: #fee2e2; color: #991b1b; }
+.bg-purple { background-color: #e9d5ff; color: #6b21a8; }
 
 .flex {
   display: flex;
@@ -112,15 +89,9 @@ body {
   display: inline-block;
 }
 
-.status-green {
-  background-color: #10b981;
-}
-.status-yellow {
-  background-color: #f59e0b;
-}
-.status-red {
-  background-color: #ef4444;
-}
+.status-green { background-color: #10b981; }
+.status-yellow { background-color: #f59e0b; }
+.status-red { background-color: #ef4444; }
 
 .alert {
   padding: 12px;
@@ -129,19 +100,4 @@ body {
   background-color: #fef3c7;
   border-left: 4px solid #f59e0b;
   color: #92400e;
-}
-
-.canvas-container {
-  background: #f9fafb;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-}
-
-canvas {
-  width: 100%;
-  height: 200px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  background: white;
 }

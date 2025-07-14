@@ -1,0 +1,36 @@
+/* LocationInfo Component Styles */
+/* Location sections inherit base styles from .section-wrapper in common.css */
+
+.location-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.location-loading {
+  padding: 20px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  text-align: center;
+  color: #6b7280;
+}
+
+.location-error {
+  margin-top: 12px;
+  padding: 12px;
+  background: #fef3c7;
+  border-radius: 8px;
+  border-left: 4px solid #f59e0b;
+}
+
+.location-error-text {
+  color: #92400e;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .location-stats {
+    grid-template-columns: 1fr;
+  }
+}
